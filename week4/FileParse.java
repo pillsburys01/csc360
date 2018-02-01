@@ -2,31 +2,40 @@ import java.util.*;
 
 public class FileParse {
 	public static void main(String[] args) {
-		int input, numParse, numUnparse, numValues;
-		double average;
+
+		int numParse;
+		int numUnparse;
+		int numTotal;
+		float numAverage;
+		String fileName;
+		numTotal = numParse = numUnparse = 0;	
 
 		Scanner nameInput = new Scanner(System.in);
 		System.out.print("Enter name of input file: ");
-		String fileName = nameInput.next();
+		fileName = nameInput.next();
 		nameInput.close();
+
 		try{
 			java.io.File file = new java.io.File(fileName);
 			Scanner fileReader = new Scanner(file);
 
+
 		do {
 
 			try{
-
-				int currentNum = fileReader.nextInt();
+				String currentLine = fileReader.nextLine();
+				int currentNum = Integer.parseInt(currentLine);
 				System.out.println(currentNum);
+				numParse++;
+				numTotal += currentNum;
 
 			}
 
 
 			catch(NumberFormatException numEx){
-				
 				System.out.println(numEx.toString());
-
+				//System.out.println(numEx.getMessage());	
+				numUnparse++;
 
 			}
 
@@ -37,13 +46,10 @@ public class FileParse {
 
 			}
 
-
-
-
 		}
 
 
-		while(true);
+		while(fileReader.hasNext());
 
 		}
 
@@ -54,5 +60,11 @@ public class FileParse {
 			System.out.println("Could not find file: " + fileName);
 			System.exit(1);
 	}
+
+	numAverage = numTotal / numParse;
+	System.out.println("Number of parsable lines: " + numParse);
+	System.out.println("Average value: " + numAverage);
+	System.out.println("Number of unparsable lines: " + numUnparse);
+	 
 	}
 }
