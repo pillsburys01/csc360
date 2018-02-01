@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class FileParse {
+public class Problem2 {
 	public static void main(String[] args) {
 
 		int numParse;
@@ -34,7 +34,6 @@ public class FileParse {
 
 			catch(NumberFormatException numEx){
 				System.out.println(numEx.toString());
-				//System.out.println(numEx.getMessage());	
 				numUnparse++;
 
 			}
