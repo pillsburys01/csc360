@@ -1,7 +1,17 @@
+/* Stephen Pillsbury
+ * CSC 360
+ * 
+ * This program prompts the user for two integers, then prints their sum.
+ * Should the user provide a non-integer, the loop will continue until they
+ * do so, with a helpful message being printed every time.
+ *
+ */
+
+
 import java.util.*;
 
-public class Problem1 {
-	public static void main(String[] args) {
+public class Problem1{
+	public static void main(String[] args){
 		
 		Integer num1;
 		Integer num2;
@@ -25,7 +35,7 @@ public class Problem1 {
 
 				else{
 				
-					System.out.print("Enter the dragon: ");
+					System.out.print("Enter second integer: ");
 					String line = scanner.nextLine();
 					num2 = Integer.parseInt(line);
 				
