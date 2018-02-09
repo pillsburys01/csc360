@@ -1,12 +1,22 @@
+/*
+Stephen Pillsbury
+Assignment 2
+CSC 360
+
+Represents the octagon to be tested in TestOctagon.java.
+Has attributes representing the side length of the octagon and
+whether it was cloned, and methods to calculate the perimeter
+and area of the octagon.
+*/
 package com.company;
 import java.lang.Math;
 
 
 public class Octagon extends GeometricObject implements Cloneable, Comparable<Octagon> {
-   public double side;
-   public boolean wasCloned;
+    private double side;
+    private boolean wasCloned;
 
-    public Octagon(int length){
+    Octagon(int length){
 
         this.side = length;
 
@@ -14,7 +24,6 @@ public class Octagon extends GeometricObject implements Cloneable, Comparable<Oc
 
     public double getArea(){
 
-        //area = (2 + 4 / Math.sqrt(2)) * side * side
         return (2 + 4 / Math.sqrt(2)) * this.side * this.side;
 
     }
@@ -28,9 +37,7 @@ public class Octagon extends GeometricObject implements Cloneable, Comparable<Oc
     @Override
     public int compareTo(Octagon oct){
 
-        if(this.side > oct.side) return 1;
-        else if (oct.side > this.side) return -1;
-        else return 0;
+        return Double.compare(this.side, oct.side);
 
     }
 
@@ -46,11 +53,10 @@ public class Octagon extends GeometricObject implements Cloneable, Comparable<Oc
     @Override
     public String toString(){
 
-       String tempString = "Octagon with side = " + this.side +
+      return( "Octagon with side = " + this.side +
        ", perimeter = " + this.getPerimeter() + " , area = " + this.getArea() +
-       ", wasCloned = " + this.wasCloned ;
+       ", wasCloned = " + this.wasCloned );
 
-       return tempString;
     }
 
 }
