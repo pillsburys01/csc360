@@ -1,25 +1,33 @@
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 
+
 public class ModernArtV2 extends Application{
 
-    private static final int PANE_PREF_WIDTH = 1000;
-    private static final int PANE_PREF_HEIGHT = 1000;
-    private static final String INITIAL_SHAPE = "Rectangle";
+    private static final int PANE_PREF_WIDTH = 800;
+    private static final int PANE_PREF_HEIGHT = 600;
+    private static final int INITIAL_OBJECT_COUNT = 50;
+    private static final int INITIAL_OBJECT_SIZE = 100;
+    private static final String INITIAL_SHAPE = "Circle";
 
     public static void main(String[] args){
         Application.launch(args);
@@ -28,17 +36,18 @@ public class ModernArtV2 extends Application{
     @Override
     public void start(Stage stage){
 
-        artShapes initialShapes= new artShapes();
-
-        Pane centerPane = new Pane(initialShapes);
+        BorderPane root = new BorderPane();
 
         bottomBox bBox = new bottomBox();
 
         Pane bottomPane = new Pane(bBox);
 
-        BorderPane root = new BorderPane(centerPane,null,null,bottomPane,null);
+        root.setBottom(bottomPane);
 
-        root.setPrefSize(1000, 1000);
+        artPane initialArtPane = new artPane();
+        root.setCenter(initialArtPane);
+
+        root.setPrefSize(PANE_PREF_WIDTH, PANE_PREF_HEIGHT);
 
         Scene scene = new Scene(root);
 
@@ -48,7 +57,27 @@ public class ModernArtV2 extends Application{
 
         stage.show();
 
+        EventHandler<MouseEvent> drawHandler = new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent e) {
+                System.out.println("Button clicked");
+
+
+            }
+        };
+
     }
+
+    EventHandler<MouseEvent> drawHandler = new EventHandler<MouseEvent>(){
+
+       @Override
+       public void handle(MouseEvent e){
+           System.out.println("Button clicked");
+
+
+       }
+    };
 
     public class bottomBox extends HBox{
 
@@ -65,13 +94,18 @@ public class ModernArtV2 extends Application{
 
            Label objectLabel = new Label("Object Count: ");
 
-           TextField objectField = new TextField("50");
+           TextField objectField = new TextField();
+           objectField.setText(Integer.toString(INITIAL_OBJECT_COUNT));
 
            Label sizeLabel = new Label("Max Size: ");
 
-           TextField sizeField = new TextField("100");
+           TextField sizeField = new TextField(Integer.toString(INITIAL_OBJECT_SIZE));
 
-           this.getChildren().addAll(shapeSelect, objectLabel, objectField, sizeLabel, sizeField);
+           Button drawButton = new Button("Draw");
+
+           drawButton.addEventFilter(MouseEvent.MOUSE_CLICKED, drawHandler);
+
+           this.getChildren().addAll(shapeSelect, objectLabel, objectField, sizeLabel, sizeField, drawButton);
 
            this.setPadding(new Insets(10, 15, 10, 15));
 
@@ -81,37 +115,50 @@ public class ModernArtV2 extends Application{
 
     }
 
-    public class artShapes extends Group {
+    public class artPane extends StackPane {
 
-        artShapes(){
+        artPane() {
 
-            new artShapes(50,100, INITIAL_SHAPE, PANE_PREF_WIDTH, PANE_PREF_HEIGHT);
+              this(INITIAL_SHAPE, INITIAL_OBJECT_COUNT,INITIAL_OBJECT_SIZE,PANE_PREF_WIDTH,(PANE_PREF_HEIGHT-200));
 
         }
 
-        artShapes(int objectCount, int maxSize, String shapeName, int paneWidth, int paneHeight){
+        artPane(String shapeName, int objectCount, double maxSize, int paneWidth, int paneHeight) {
 
-            if(shapeName.equals("Circle")){}
-            
-            else if(shapeName.equals("Rectangle")){
+            Group group = new Group();
+
+            if (shapeName.equals("Circle")) {
+
+                Circle[] circles = RandomCircles(objectCount, maxSize, paneWidth, paneHeight);
+
+                for (Circle c : circles){
+                    group.getChildren().add(c);
+                }
+            }
+
+
+            else if (shapeName.equals("Rectangle")) {
 
                 Rectangle[] rectangles = RandomRectangles(objectCount, maxSize, paneWidth, paneHeight);
 
-                for(Rectangle r : rectangles){
-                    this.getChildren().add(r);
+                for (Rectangle r : rectangles) {
+                    group.getChildren().add(r);
                 }
 
             }
-            
-            else{}
+
+            else {}
+
+            this.getChildren().add(group);
+
 
 
         }
 
 
-
     }
-    private Rectangle[] RandomRectangles(int rectangleCount, double rectangleMaxSize, int paneWidth, int paneHeight){
+
+    private  Rectangle[] RandomRectangles(int rectangleCount, double rectangleMaxSize, int paneWidth, int paneHeight){
 
         Rectangle[] randomTangles = new Rectangle[rectangleCount];
         for(int i = 0; i < rectangleCount; i++){
@@ -129,6 +176,26 @@ public class ModernArtV2 extends Application{
 
         return randomTangles;
 
+    }
+
+    private Circle[] RandomCircles(int circleCount, double circleMaxSize, int paneWidth, int paneHeight){
+
+       double maxRadius = circleMaxSize / 2;
+
+       Circle[] randomCircs = new Circle[circleCount];
+
+       for(int i = 0; i < circleCount; i++) {
+
+           int radius = (int) (Math.random() * maxRadius) ;
+           int x = (int) (Math.random() * paneWidth) - radius;
+           int y = (int) (Math.random() * paneHeight) - radius;
+
+           randomCircs[i] = new Circle(x, y, radius);
+           randomCircs[i].setFill(Color.color(Math.random(), Math.random(), Math.random()));
+           randomCircs[i].setOpacity(Math.random());
+       }
+
+       return randomCircs;
     }
 
 
