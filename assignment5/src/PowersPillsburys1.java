@@ -87,8 +87,20 @@ public class PowersPillsburys1 {
 
     public static double multPow(double accumulator, double base, int power){
 
+        if(power == 0 ) return accumulator;
 
-        return 0.0;
+        else if( power == 1 ) return base * accumulator;
+
+        else if ((power % 2) == 0){
+
+            return multPow(accumulator, base * base, power / 2);
+        }
+
+        else {
+                return multPow(accumulator * base, base * base, power / 2);
+        }
     }
 
 }
+
+
