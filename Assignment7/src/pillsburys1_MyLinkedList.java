@@ -1,3 +1,16 @@
+/*
+Assignment 7 for CSC 360 by Stephen Pillsbury
+05/02/18
+
+A basic linked list implementation. Supports addition, substitution,
+removal, and replacement of nodes, as well as search.
+
+
+ */
+
+
+
+
 import java.util.NoSuchElementException;
 
 public class pillsburys1_MyLinkedList<E> extends MyAbstractList<E> {
@@ -187,7 +200,7 @@ public class pillsburys1_MyLinkedList<E> extends MyAbstractList<E> {
                if (current.element.equals(e)) return true;
            }
 
-           else if(current.element == null) return true;
+           else if(current.element == null && e == null) return true;
 
            current = current.next;
 
@@ -200,8 +213,9 @@ public class pillsburys1_MyLinkedList<E> extends MyAbstractList<E> {
     @Override /** Return the element at the specified index */
     public E get(int index) {
 
-        if (index == 1) return head.element;
-        else if (index >= size) return tail.element;
+        if(index < 0 || index >= size) throw new IndexOutOfBoundsException();
+
+         else if (index >= size) return tail.element;
 
         else {
             Node<E> temp = head;
@@ -217,15 +231,13 @@ public class pillsburys1_MyLinkedList<E> extends MyAbstractList<E> {
     public int indexOf(E e) {
 
         Node<E> temp = head;
-        //System.out.println("We are walking a linked list of size " + size +
-        //" looking for " + e);
         for(int i = 0; i < size; i++){
 
             if(e == null){
                 if (temp.element == null) return i;
             }
             else if(temp.element.equals(e)) return i;
-            else temp = temp.next;
+            temp = temp.next;
 
         }
 
@@ -257,12 +269,8 @@ public class pillsburys1_MyLinkedList<E> extends MyAbstractList<E> {
 
         Node<E> temp = head;
 
-        if (index == 1){
-            temp.element = head.element;
-            head.element = e;
-            return temp.element;
-        }
-        else if (index >= size){
+        if(index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        else  if (index >= size){
 
             temp.element = tail.element;
             tail.element = e;
@@ -272,7 +280,7 @@ public class pillsburys1_MyLinkedList<E> extends MyAbstractList<E> {
 
         else {
 
-            for (int i = 1; i <= index; i++) temp = temp.next;
+            for (int i = 0; i < index; i++) temp = temp.next;
 
             E prevElement = temp.element;
             temp.element = e;
